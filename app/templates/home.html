@@ -1,0 +1,12 @@
+{% if current_user.is_authenticated %}
+<div>
+    <h2>{{ current_user.name }}</h2>
+    <p>Texto logado!</p>
+    <a href="{{ url_for('logout') }}"> Sair </a>
+</div>
+{% else %}
+<div>
+    <h2>Visitante!</h2>
+    <p>Texto deslogado!</p>
+</div>
+{% endif %}
