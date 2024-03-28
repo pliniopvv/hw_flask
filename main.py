@@ -1,5 +1,5 @@
-from flask import render_template, request, redirect, url_for, jsonify
-from flask_login import login_user, logout_user
+from flask import render_template, request, redirect, url_for, jsonify, Response
+from flask_login import login_user, logout_user, current_user
 from app import app, db
 from app.models import User
 
@@ -59,13 +59,21 @@ def logout():
 
 @app.route('/hellojson')
 def hello_json():
-    return jsonify({"msg":"hello json!"})
+    if current_user.is_authenticated:
+        # code loged go here;
+        return jsonify({"msg":"hello json!"})
+    else:
+        return Response("Não logado", 401)
 
 @app.post('/get_json')
 def get_json():
-    content = request.json
-    print(content)
-    return content
+    if current_user.is_authenticated:
+        content = request.json
+        print(content)
+        return content
+    else:
+        return Response("Não logado", 401)
+
 #                                                                         #
 #                                                                         #
 #                                                                         #
@@ -77,7 +85,6 @@ def get_json():
 #                                                                         #
 # Sistema SPA                                                             #
 #                                                                         #
-
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -91,6 +98,5 @@ with app.app_context():
 #                                                                         #
 #                                                                         #
 ###########################################################################
-
 
 app.run(debug=True)
