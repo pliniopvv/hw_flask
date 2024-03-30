@@ -1,4 +1,4 @@
-from app import db, login_manager
+from app import db, ma, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
@@ -21,3 +21,9 @@ class User(db.Model, UserMixin):
     def verify_password(self, pwd):
         return check_password_hash(self.password, pwd)
     
+class UserSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'name', 'email', 'password')
+
+user_share_schema = UserSchema()
+users_share_schema = UserSchema(many=True)
